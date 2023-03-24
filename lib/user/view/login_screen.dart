@@ -1,7 +1,12 @@
+import 'dart:convert';
+import 'dart:io';
+
 import 'package:badal/common/component/costom_text_form_field.dart';
 import 'package:badal/common/const/colors.dart';
+import 'package:badal/common/const/data.dart';
 import 'package:badal/common/lay%20out/default_layout.dart';
 import 'package:badal/common/view/root_tab.dart';
+import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 
 class LoginScreen extends StatefulWidget {
@@ -17,6 +22,12 @@ class _LoginScreenState extends State<LoginScreen> {
 
   @override
   Widget build(BuildContext context) {
+    final dio = Dio();
+    const emulatorIp = '10.0.2.2:3000';
+    const simulatorIp = '127.0.0.1:3000';
+
+    final ip = Platform.isIOS ? simulatorIp : emulatorIp;
+
     return DefaultLayout(
       child: SingleChildScrollView(
         keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
@@ -56,14 +67,43 @@ class _LoginScreenState extends State<LoginScreen> {
                 SizedBox(
                   height: 16.0,
                 ),
-                ElevatedButton(onPressed:() {},
+                ElevatedButton(
+                  onPressed: () async {
+                    String rawstring = '$username:$password';
+
+                    Codec<String, String> stringToBase64 = utf8.fuse(base64);
+
+                    String token = stringToBase64.encode(rawstring);
+
+                    final resp = await dio.post('http://$ip/auth/login',
+                        options:
+                            Options(headers: {'authorization': 'Basic $token'}));
+
+                    final refreshToken = resp.data['refreshToken'];
+                    final accessToken = resp.data['accessToken'];
+                    await storage.write(
+                      key: REFRESH_TOKEN_KEY,
+                      value: refreshToken,
+                    );
+                    await storage.write(
+                      key: ACCESS_TOKEN_KEY,
+                      value: accessToken,
+                    );
+                    Navigator.of(context).push(
+                      MaterialPageRoute(
+                        builder: (_) => const RootTab(),
+                      ),
+                    );
+                  },
                   style:
                       ElevatedButton.styleFrom(backgroundColor: priMaryColor),
                   child: Text('로그인'),
                 ),
-                TextButton(onPressed: (){},
-                    style: TextButton.styleFrom(foregroundColor: Colors.black),
-                    child: Text('회원가입'),)
+                TextButton(
+                  onPressed: () {},
+                  style: TextButton.styleFrom(foregroundColor: Colors.black),
+                  child: Text('회원가입'),
+                )
               ],
             ),
           ),

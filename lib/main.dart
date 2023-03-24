@@ -1,5 +1,6 @@
+import 'package:badal/common/view/splash_screen.dart';
 import 'package:badal/user/view/login_screen.dart';
-import 'package:flutter/cupertino.dart';
+
 import 'package:flutter/material.dart';
 
 void main () {
@@ -16,7 +17,9 @@ class _App extends StatelessWidget {
         fontFamily: 'NotoSans',
       ),
       debugShowCheckedModeBanner: false,
-      home: LoginScreen(),
+      home: SplashScreen(),
     );
   }
 }
+
+
