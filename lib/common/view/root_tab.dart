@@ -36,12 +36,17 @@ with SingleTickerProviderStateMixin{
   }
   @override
   Widget build(BuildContext context) {
+    
     return DefaultLayout(
+
+
       title: '코팩 딜리버리',
       child: TabBarView(
+
         physics: NeverScrollableScrollPhysics(),
         controller: controller,
         children: [
+
           RestaurantScreen(),
           Center(child: Container(child: Text('음식'))),
           Center(child: Container(child: Text('주문'))),

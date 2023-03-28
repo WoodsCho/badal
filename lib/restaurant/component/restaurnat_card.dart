@@ -11,7 +11,7 @@ class RestaurantCard extends StatelessWidget {
   final List<String> tags;
 
   // 레스토랑 태그
-  final int ratingCount;
+  final int ratingsCount;
 
   //평점 갯수
   final int deliveryTime;
@@ -20,7 +20,7 @@ class RestaurantCard extends StatelessWidget {
   final int deliveryFee;
 
   //배송료
-  final double rating;
+  final double ratings;
 
   //평균 평점
   const RestaurantCard({
@@ -30,13 +30,13 @@ class RestaurantCard extends StatelessWidget {
     //레스토랑 이름
     required this.tags,
     // 레스토랑 태그
-    required this.ratingCount,
+    required this.ratingsCount,
     //평점 갯수
     required this.deliveryTime,
     //배송시간
     required this.deliveryFee,
     //배송료
-    required this.rating,
+    required this.ratings,
     Key? key,
   }) : super(key: key);
 
@@ -57,25 +57,25 @@ class RestaurantCard extends StatelessWidget {
                 name,
                 style: TextStyle(fontSize: 20.0, fontWeight: FontWeight.w600),
               ),
-              Text(tags.join(' · '),style: TextStyle(color: bodyTextColor),),
+              SizedBox(
+                height: 8.0,
+              ),
+              Text(
+                tags.join(' · '),
+                style: TextStyle(color: bodyTextColor),
+              ),
+              SizedBox(
+                height: 8.0,
+              ),
               Row(
                 children: [
-                  Icon(
-                    Icons.star,
-                    color: priMaryColor,
-                    size: 13,
-                  ),
-                  Text(rating.toString()),
-                  Text(' · '),
-                  Icon(
-                    Icons.view_list_outlined,
-                    color: priMaryColor,
-                    size: 13,
-                  ),
-                  Text(ratingCount.toString()),
-                  Text(' · '),
-
-                  Text(' · ')
+                  _IconText(icon: Icons.star, label: ratings.toString()),
+                  renderDot(),
+                  _IconText(icon: Icons.receipt, label: ratingsCount.toString()),
+                  renderDot(),
+                  _IconText(icon: Icons.timelapse_outlined, label: '$deliveryTime 분'),
+                  renderDot(),
+                  _IconText(icon: Icons.monetization_on, label: '${deliveryFee == 0? '무료' : deliveryFee.toString()}')
 
                 ],
               )
@@ -83,6 +83,51 @@ class RestaurantCard extends StatelessWidget {
           ),
         ],
       ),
+    );
+  }
+}
+
+
+renderDot(){
+  return Padding(padding: EdgeInsets.symmetric(horizontal: 4.0),
+  child: Text(
+  '·',style: TextStyle(
+    fontWeight: FontWeight.w500,
+    fontSize: 12.0
+  ),
+  ),);
+}
+
+class _IconText extends StatelessWidget {
+  final IconData icon;
+  final String label;
+
+  const _IconText({
+    required this.icon,
+    required this.label,
+    Key? key,
+  }) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Icon(
+          icon,
+          color: priMaryColor,
+          size: 14.0,
+        ),
+        SizedBox(
+          width: 8.0,
+        ),
+        Text(
+          label,
+          style: TextStyle(
+            fontSize: 12.0,
+            fontWeight: FontWeight.w600,
+          ),
+        )
+      ],
     );
   }
 }

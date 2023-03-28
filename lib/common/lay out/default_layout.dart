@@ -17,6 +17,7 @@ class DefaultLayout extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      
       backgroundColor: backgroundColor ?? Colors.white,
       appBar: renderAppBar(),
       body: child,
