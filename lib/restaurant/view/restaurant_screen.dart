@@ -1,5 +1,7 @@
 import 'package:badal/common/const/data.dart';
 import 'package:badal/restaurant/component/restaurnat_card.dart';
+import 'package:badal/restaurant/model/restaurant_model.dart';
+import 'package:badal/restaurant/view/restaurant_detail_screen.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/rendering/box.dart';
@@ -41,15 +43,15 @@ class RestaurantScreen extends StatelessWidget {
                 itemCount: snapshot.data!.length,
                 itemBuilder: (_, index) {
                   final item =  snapshot.data![index];
+                  final pItem = RestaurantModel.fromJson(json:item);
 
-                  return RestaurantCard(
-                      image: Image.network('http://$ip${item['thumbUrl']}'),
-                      name: item['name'],
-                      tags: List<String>.from(item['tags']),
-                      ratingsCount: item['ratingsCount'],
-                      deliveryTime: item['deliveryTime'],
-                      deliveryFee: item['deliveryFee'],
-                      ratings: item['ratings']);
+                  return GestureDetector(
+                    onTap:(){
+                      Navigator.of(context).push(MaterialPageRoute(builder: (_)=> RestaurantDetaileScreen()));
+                    } ,
+                    child: RestaurantCard.fromModel(
+                        model :pItem,),
+                  );
                 },
                 separatorBuilder: (_, index){
                   return SizedBox(height: 16.0,);
